@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: kot-stduy
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: sns
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    ports:
+      - "3396:3306"   # 호스트의 포트 3306을 컨테이너의 포트 3306에 매핑
+    volumes:
+      - mysql_data:/var/lib/mysql   # 데이터가 저장될 볼륨을 설정
+    networks:
+      - mysql_network
+
+volumes:
+  mysql_data:
+
+networks:
+  mysql_network:
