@@ -15,9 +15,10 @@ class UserService(
         val encryptedPassword: String = request.isSamePasswordAs(request.password)
             .run { passwordEncoder.encode(request.password) };
 
-        val user = User.of(nickname = request.nickname, email = request.email, password = encryptedPassword)
+        val user = request.toDomain();
+        user.changePassword(encryptedPassword);
 
-        return userRepository.save(user)
+        return userRepository.save(user);
     }
 
     fun validateNickname(nickname: String) =
