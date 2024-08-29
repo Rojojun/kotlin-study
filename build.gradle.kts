@@ -25,6 +25,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
     runtimeOnly("com.mysql:mysql-connector-j")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
