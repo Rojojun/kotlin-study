@@ -13,5 +13,7 @@ data class User(
     @Column(unique = true, nullable = false)
     val email: String = ""
 ): BaseEntity() {
-
+    companion object {
+        fun of(nickname: String, password: String, email: String): User = User(nickname, password, email);
+    }
 }
