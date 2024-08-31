@@ -7,6 +7,8 @@ import jakarta.persistence.Table
 @Table(name = "board")
 data class Board(
     val title: String = "",
-    val content: String = ""
+    val content: String = "",
+    val likeUsers: List<User> = emptyList(),
 ) : BaseEntity() {
+    fun update(title: String, content: String): Board = this.copy(title = title, content = content);
 }

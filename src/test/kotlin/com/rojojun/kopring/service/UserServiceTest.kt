@@ -47,5 +47,8 @@ class UserServiceTest {
         println(savedUser.password)
     }
 
+    @Test
+    fun `User 중복 체크`() {
 
+    }
 }

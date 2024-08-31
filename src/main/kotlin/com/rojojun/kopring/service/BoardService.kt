@@ -9,7 +9,10 @@ import org.springframework.stereotype.Service
 
 @Service
 class BoardService(private val boardRepository: BoardRepository) {
-    fun saveBoard(request: BoardRequestDto): Board = boardRepository.save(request.toModel())
+    fun saveBoard(request: BoardRequestDto): () -> BoardResponseDto = {
+        val board = boardRepository.save(request.toModel())
+        BoardResponseDto(board)
+    }
 
     fun findAll(): () -> List<BoardListResponseDto> = {
         val boardList: List<Board> = boardRepository.findAll();
@@ -19,6 +22,14 @@ class BoardService(private val boardRepository: BoardRepository) {
     fun getBoard(id: Long): () -> BoardResponseDto = {
         val board = boardRepository.findById(id)
             .orElseThrow { throw RuntimeException("Board with id $id not found") }
-        BoardResponseDto.from(board)
+        BoardResponseDto(board)
+    }
+
+    fun editBoard(requestDto: BoardRequestDto, id: Long): () -> BoardResponseDto = {
+        val board = boardRepository.findById(id)
+            .orElseThrow { throw RuntimeException("Board with id $id not found") }
+
+        board.update(requestDto.title, requestDto.content);
+        BoardResponseDto(board)
     }
 }
