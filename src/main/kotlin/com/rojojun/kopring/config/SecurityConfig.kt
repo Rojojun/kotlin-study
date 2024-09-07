@@ -1,6 +1,5 @@
 package com.rojojun.kopring.config
 
-import com.sun.net.httpserver.HttpsConfigurator
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -20,7 +19,7 @@ class SecurityConfig {
     @Bean
     fun defaultSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
         return http.csrf{ it.disable() }
-            .formLogin{ it.disable() }
+            .formLogin{ formLogin -> formLogin.disable() }
             .build()
     }
 
