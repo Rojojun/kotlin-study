@@ -13,13 +13,17 @@ class SecurityConfig {
 
     @Bean
     fun webSecurityCustomizer(): WebSecurityCustomizer = WebSecurityCustomizer { webSecurity ->
-        webSecurity.ignoring().requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/health")
+        webSecurity.ignoring().requestMatchers("/swagger-ui/", "/swagger-ui/**", "/swagger-ui.html", "/health")
     }
 
     @Bean
     fun defaultSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
         return http.csrf{ it.disable() }
             .formLogin{ formLogin -> formLogin.disable() }
+            .authorizeHttpRequests {
+                request -> request.requestMatchers("/swagger-ui/", "/swagger-ui/**", "/swagger-ui.html", "health").permitAll()
+                    request.requestMatchers("/**").permitAll()
+            }
             .build()
     }
 
