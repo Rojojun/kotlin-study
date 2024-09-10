@@ -17,5 +17,11 @@ data class BoardResource(
 ): BaseEntity() {
     constructor() : this(Status.USED, "", 0L, "", Board())
 
+    companion object {
+        fun create(board: Board): BoardResource {
+            return BoardResource()
+        }
+    }
+
     fun delete(): BoardResource = this.copy(status = Status.DELETED)
 }
