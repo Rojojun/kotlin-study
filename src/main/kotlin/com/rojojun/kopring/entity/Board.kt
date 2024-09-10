@@ -12,7 +12,9 @@ data class Board(
     @OneToMany(mappedBy = "board")
     val likeUsers: MutableSet<UserBoardLike> = TreeSet(),
     @OneToMany(mappedBy = "board")
-    val replyList: MutableSet<Reply> = TreeSet()
+    val replyList: MutableSet<Reply> = TreeSet(),
+    @OneToMany(mappedBy = "board")
+    val boardResource: MutableSet<BoardResource> = TreeSet()
 
 ) : BaseEntity() {
     fun update(title: String, content: String): Board = this.copy(title = title, content = content);
