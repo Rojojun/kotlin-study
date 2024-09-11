@@ -2,7 +2,6 @@ package com.rojojun.kopring.service
 
 import com.rojojun.kopring.dto.LoginDto
 import com.rojojun.kopring.dto.SignUpDto
-import com.rojojun.kopring.entity.User
 import com.rojojun.kopring.repository.UserRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -12,14 +11,14 @@ class UserService(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder
 ) {
-    fun signUp(request: SignUpDto): User {
+    fun signUp(request: SignUpDto): Long {
         val encryptedPassword: String = request.isSamePasswordAs(request.password)
             .run { passwordEncoder.encode(request.password) };
 
         val user = request.toDomain();
         user.changePassword(encryptedPassword);
 
-        return userRepository.save(user);
+        return userRepository.save(user).id;
     }
 
     fun login(request: LoginDto): Long {
