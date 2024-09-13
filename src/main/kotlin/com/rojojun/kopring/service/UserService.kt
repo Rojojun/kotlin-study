@@ -15,14 +15,13 @@ class UserService(
         val encryptedPassword: String = request.isSamePasswordAs(request.password)
             .run { passwordEncoder.encode(request.password) };
 
-        val user = request.toDomain();
-        user.changePassword(encryptedPassword);
+        var user = request.toDomain();                  // 불변 객체 val을 사용하게 될 경우 비밀번호 변경이 안됨
+        user = user.changePassword(encryptedPassword);
 
         return userRepository.save(user).id;
     }
 
     fun login(request: LoginDto): Long {
-        val encoredPassword = passwordEncoder.encode(request.password)
         val user = when {
             request.email != null -> userRepository.findByEmail(request.email)
             request.nickname != null -> userRepository.findByNickname(request.nickname)
@@ -33,8 +32,8 @@ class UserService(
             "User must not be null"
         }
 
-        require(passwordEncoder.matches(encoredPassword, user.password)) {
-            "Password is unmatched for email ${request.email}"
+        require(passwordEncoder.matches(request.password, user.password)) {
+            "Password is unmatched for email ${request.email ?: request.nickname}"
         }
         return user.id;
     }

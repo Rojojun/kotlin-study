@@ -8,6 +8,6 @@ data class SignUpDto(
     val password: String,
     val checkPassword: String
 ) {
-    fun toDomain(): User = User(email, nickname, password)
+    fun toDomain(): User = User.of(nickname, password, email)
     fun isSamePasswordAs(password: String) = require(password == checkPassword) { ("비밀번호 불일치") }
 }
