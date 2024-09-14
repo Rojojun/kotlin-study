@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 class SecurityConfig(
+    private val jwtUtil: JwtUtil,
     private val customJwtFilter: CustomJwtFilter
 ) {
 
