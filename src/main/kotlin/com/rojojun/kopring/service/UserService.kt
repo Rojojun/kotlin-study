@@ -3,6 +3,9 @@ package com.rojojun.kopring.service
 import com.rojojun.kopring.dto.LoginDto
 import com.rojojun.kopring.dto.SignUpDto
 import com.rojojun.kopring.repository.UserRepository
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -35,6 +38,10 @@ class UserService(
         require(passwordEncoder.matches(request.password, user.password)) {
             "Password is unmatched for email ${request.email ?: request.nickname}"
         }
+
+        val authentication: Authentication = UsernamePasswordAuthenticationToken(user, null)
+        SecurityContextHolder.getContext().authentication = authentication
+
         return user.id;
     }
 

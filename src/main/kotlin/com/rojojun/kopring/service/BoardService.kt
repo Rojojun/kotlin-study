@@ -16,7 +16,7 @@ class BoardService(
     private val userRepository: UserRepository,
     private val userBoardLikeRepository: UserBoardLikeRepository
 ) {
-    fun saveBoard(request: BoardRequestDto): () -> BoardResponseDto = {
+    fun saveBoard(request: BoardRequestDto, id: String): () -> BoardResponseDto = {
         val board = boardRepository.save(request.toModel())
         BoardResponseDto(board)
     }
