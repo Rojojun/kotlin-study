@@ -19,7 +19,7 @@ class SecurityConfig(
 
     @Bean
     fun webSecurityCustomizer(): WebSecurityCustomizer = WebSecurityCustomizer { webSecurity ->
-        webSecurity.ignoring().requestMatchers("/swagger-ui/", "/swagger-ui/**", "/swagger-ui.html", "/health")
+        webSecurity.ignoring().requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/health")
     }
 
     @Bean
@@ -27,7 +27,7 @@ class SecurityConfig(
         return http.csrf{ it.disable() }
             .formLogin{ formLogin -> formLogin.disable() }
             .authorizeHttpRequests {
-                request -> request.requestMatchers("/swagger-ui/", "/swagger-ui/**", "/swagger-ui.html", "health").permitAll()
+                request -> request.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "health").permitAll()
                     .anyRequest().authenticated()
             }
             .addFilterBefore(customJwtFilter, UsernamePasswordAuthenticationFilter::class.java)
