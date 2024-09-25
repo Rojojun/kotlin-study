@@ -1,8 +1,10 @@
 package com.rojojun.kopring.service
 
 import com.rojojun.kopring.dto.LoginDto
+import com.rojojun.kopring.dto.LoginResponseDto
 import com.rojojun.kopring.dto.SignUpDto
 import com.rojojun.kopring.repository.UserRepository
+import com.rojojun.kopring.security.JwtUtil
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
@@ -12,7 +14,8 @@ import org.springframework.stereotype.Service
 @Service
 class UserService(
     private val userRepository: UserRepository,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
+    private val  jwtUtil: JwtUtil
 ) {
     fun signUp(request: SignUpDto): Long {
         val encryptedPassword: String = request.isSamePasswordAs(request.password)
@@ -24,7 +27,7 @@ class UserService(
         return userRepository.save(user).id;
     }
 
-    fun login(request: LoginDto): Long {
+    fun login(request: LoginDto): LoginResponseDto {
         val user = when {
             request.email != null -> userRepository.findByEmail(request.email)
             request.nickname != null -> userRepository.findByNickname(request.nickname)
@@ -41,8 +44,9 @@ class UserService(
 
         val authentication: Authentication = UsernamePasswordAuthenticationToken(user, null)
         SecurityContextHolder.getContext().authentication = authentication
+        val token: String = jwtUtil.generateToken(authentication.name)
 
-        return user.id;
+        return LoginResponseDto(user.id, token);
     }
 
     fun validateNickname(nickname: String) =
@@ -53,5 +57,5 @@ class UserService(
     fun validateEmail(email: String) =
         require(!userRepository.existsUserByEmail(email)) {
             "User doesn't have email"
-        }
+    }
 }
