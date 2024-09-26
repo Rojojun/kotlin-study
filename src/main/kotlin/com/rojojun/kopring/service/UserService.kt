@@ -41,10 +41,13 @@ class UserService(
         require(passwordEncoder.matches(request.password, user.password)) {
             "Password is unmatched for email ${request.email ?: request.nickname}"
         }
-
-        val authentication: Authentication = UsernamePasswordAuthenticationToken(user, null)
+        val principal = user.email ?: user.nickname ?: throw IllegalArgumentException("User must have an email or nickname")
+        val authentication: Authentication = UsernamePasswordAuthenticationToken(principal, null)
         SecurityContextHolder.getContext().authentication = authentication
         val token: String = jwtUtil.generateToken(authentication.name)
+//        val authentication: Authentication = UsernamePasswordAuthenticationToken(user, null)
+//        SecurityContextHolder.getContext().authentication = authentication
+//        val token: String = jwtUtil.generateToken(authentication.name)
 
         return LoginResponseDto(user.id, token);
     }
