@@ -44,7 +44,7 @@ class SecurityConfig(
 
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
-        val config: CorsConfiguration = CorsConfiguration()
+        val config = CorsConfiguration()
 
         config.allowCredentials = true
         config.addAllowedOrigin("*")
